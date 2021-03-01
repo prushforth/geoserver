@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import javax.xml.namespace.QName;
 import org.apache.commons.io.FileUtils;
@@ -120,7 +121,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
 
         // make sure CRS ordering is correct
         System.setProperty("org.geotools.referencing.forceXY", "true");
-        System.setProperty("user.timezone", "GMT");
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
     @AfterClass
