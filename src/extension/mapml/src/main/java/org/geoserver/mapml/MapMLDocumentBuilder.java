@@ -374,8 +374,31 @@ public class MapMLDocumentBuilder {
     }
 
     /**
-     * Parses the projection into a ProjType, or throws a proper service exception indicating the
-     * unsupported CRS
+     * <<<<<<< HEAD ======= Check if all layers in the request use features
+     *
+     * @param layers List of RawLayer objects
+     * @return boolean
+     */
+    private boolean allLayersUsingFeatures(List<RawLayer> layers) {
+        for (RawLayer layer : layers) {
+            boolean useFeatures =
+                    Optional.ofNullable(layer.getPublishedInfo())
+                            .filter(l -> l instanceof LayerInfo)
+                            .map(l -> ((LayerInfo) l).getResource())
+                            .map(r -> r.getMetadata().get(MAPML_USE_FEATURES, Boolean.class))
+                            .orElse(false);
+            boolean isVector = (PublishedType.VECTOR == layer.getPublishedInfo().getType());
+            if (!useFeatures || !isVector) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * >>>>>>> c0e545e1c7 ([GEOS-11294b] mapml wms vector representation query filter) Parses the
+     * projection into a ProjType, or throws a proper service exception indicating the unsupported
+     * CRS
      */
     private ProjType parseProjType() {
         try {
