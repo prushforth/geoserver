@@ -151,7 +151,7 @@ public class MapMLStyle {
     public String getPropertiesAsCSS() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : properties.entrySet()) {
-            sb.append(entry.getKey()).append(":").append(entry.getValue()).append(";");
+            sb.append(entry.getKey()).append(": ").append(entry.getValue()).append(";");
         }
         return sb.toString();
     }
@@ -162,7 +162,7 @@ public class MapMLStyle {
      * @return the style as a CSS style string
      */
     public String getStyleAsCSS() {
-        return getCSSClassName() + " { " + getPropertiesAsCSS() + " }";
+        return getCSSClassName() + "{" + getPropertiesAsCSS() + "}";
     }
 
     /**

@@ -43,6 +43,8 @@ import org.geotools.util.logging.Logging;
 
 public class MapMLFeatureUtil {
     private static final Logger LOGGER = Logging.getLogger(MapMLFeatureUtil.class);
+    public static final String STYLE_CLASS_PREFIX = ".";
+    public static final String STYLE_CLASS_SUFFIX = " ";
 
     /**
      * Convert a feature collection to a MapML document
@@ -191,8 +193,9 @@ public class MapMLFeatureUtil {
             MapMLStyle mapMLStyle = entry.getValue();
             // empty properties can happen when style elements are not supported
             if (mapMLStyle != null && !mapMLStyle.getProperties().isEmpty()) {
+                style.append(STYLE_CLASS_PREFIX);
                 style.append(mapMLStyle.getStyleAsCSS());
-                style.append(" ");
+                style.append(STYLE_CLASS_SUFFIX);
             }
         }
         return style.toString();

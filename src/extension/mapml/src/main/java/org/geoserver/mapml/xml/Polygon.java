@@ -13,7 +13,9 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -43,6 +45,10 @@ public class Polygon {
             namespace = "http://www.w3.org/1999/xhtml")
     protected List<JAXBElement<List<String>>> threeOrMoreCoordinatePairs;
 
+    @XmlAttribute(name = "class")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String style;
+
     /**
      * Gets the value of the threeOrMoreCoordinatePairs property.
      *
@@ -64,5 +70,23 @@ public class Polygon {
             threeOrMoreCoordinatePairs = new ArrayList<>();
         }
         return this.threeOrMoreCoordinatePairs;
+    }
+
+    /**
+     * Gets the value of the style property.
+     *
+     * @return the style class
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the value of the style property.
+     *
+     * @param styleCLass the style class
+     */
+    public void setStyle(String styleCLass) {
+        this.style = styleCLass;
     }
 }

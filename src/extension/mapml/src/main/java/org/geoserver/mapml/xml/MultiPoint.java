@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlList;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -44,6 +46,10 @@ public class MultiPoint {
             namespace = "http://www.w3.org/1999/xhtml")
     protected List<String> coordinates;
 
+    @XmlAttribute(name = "class")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String style;
+
     /**
      * Gets the value of the map-coordinates property. Exception Description: The property or field
      * coordinates on the class org.geoserver.mapml.xml.MultiPoint is required to be included in the
@@ -68,5 +74,23 @@ public class MultiPoint {
             coordinates = new ArrayList<>();
         }
         return this.coordinates;
+    }
+
+    /**
+     * Gets the value of the style property.
+     *
+     * @return the style
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the value of the style property.
+     *
+     * @param value the style
+     */
+    public void setStyle(String value) {
+        this.style = value;
     }
 }

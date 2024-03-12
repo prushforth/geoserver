@@ -26,7 +26,6 @@ import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.MultiLineString;
 import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.MultiPolygon;
@@ -111,10 +110,10 @@ public class MapMLGenerator {
         pc.setAnyElement(sb.toString());
         Optional<GeometryContent> geometryContent;
         if (mapMLStyle == null) {
-            geometryContent = Optional.of(buildGeometry(g));
+            geometryContent = Optional.of(buildGeometry(g, null));
         } else {
-            geometryContent = convertGeometryToSymbolizerType(g, mapMLStyle);
-            f.setStyle(mapMLStyle.getCSSClassName());
+            geometryContent =
+                    convertGeometryToSymbolizerType(g, mapMLStyle, mapMLStyle.getCSSClassName());
         }
         // can't convert geometry to type expected by symbolizer
         if (geometryContent.isEmpty()) {
@@ -139,10 +138,10 @@ public class MapMLGenerator {
      * @throws IOException IOException
      */
     private Optional<GeometryContent> convertGeometryToSymbolizerType(
-            Geometry g, MapMLStyle mapMLStyle) throws IOException {
+            Geometry g, MapMLStyle mapMLStyle, String styleClass) throws IOException {
         if (mapMLStyle.getSymbolizerType().startsWith(POINT)) {
             if (g instanceof Point || g instanceof MultiPoint) {
-                return Optional.of(buildGeometry(g));
+                return Optional.of(buildGeometry(g, styleClass));
             } else if (g instanceof LineString || g instanceof MultiLineString) {
                 LengthIndexedLine indexedLine = new LengthIndexedLine(g);
                 double length = indexedLine.getEndIndex();
@@ -152,32 +151,32 @@ public class MapMLGenerator {
                     return Optional.empty();
                 }
                 Geometry midpointGeometry = g.getFactory().createPoint(midpoint);
-                return Optional.of(buildGeometry(midpointGeometry));
+                return Optional.of(buildGeometry(midpointGeometry, styleClass));
             } else if (g instanceof Polygon || g instanceof MultiPolygon) {
                 Geometry centroid = g.getCentroid();
-                return Optional.of(buildGeometry(centroid));
+                return Optional.of(buildGeometry(centroid, styleClass));
             } else {
                 return Optional.empty();
             }
 
         } else if (mapMLStyle.getSymbolizerType().startsWith(LINE)) {
             if (g instanceof LineString || g instanceof MultiLineString) {
-                return Optional.of(buildGeometry(g));
+                return Optional.of(buildGeometry(g, styleClass));
             } else if (g instanceof Polygon || g instanceof MultiPolygon) {
                 Geometry boundary = g.getBoundary();
-                return Optional.of(buildGeometry(boundary));
+                return Optional.of(buildGeometry(boundary, styleClass));
             } else {
                 return Optional.empty();
             }
         } else if (mapMLStyle.getSymbolizerType().startsWith(POLYGON)) {
             if (g instanceof Polygon || g instanceof MultiPolygon) {
-                return Optional.of(buildGeometry(g));
+                return Optional.of(buildGeometry(g, styleClass));
             } else if (g instanceof LineString || g instanceof MultiLineString) {
                 Geometry buffer = g.buffer(BUFFER_DISTANCE);
-                return Optional.of(buildGeometry(buffer));
+                return Optional.of(buildGeometry(buffer, styleClass));
             } else if (g instanceof Point || g instanceof MultiPoint) {
                 Geometry buffer = g.buffer(BUFFER_DISTANCE);
-                return Optional.of(buildGeometry(buffer));
+                return Optional.of(buildGeometry(buffer, styleClass));
             } else {
                 return Optional.empty();
             }
@@ -244,22 +243,45 @@ public class MapMLGenerator {
      * @return
      * @throws IOException - IOException
      */
-    public GeometryContent buildGeometry(Geometry g) throws IOException {
+    public GeometryContent buildGeometry(Geometry g, String styleCLass) throws IOException {
         GeometryContent geom = new GeometryContent();
         if (g instanceof Point) {
-            geom.setGeometryContent(factory.createPoint(buildPoint((Point) g)));
+            org.geoserver.mapml.xml.Point point = buildPoint((Point) g);
+            if (styleCLass != null) {
+                point.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createPoint(point));
         } else if (g instanceof MultiPoint) {
-            geom.setGeometryContent(factory.createMultiPoint(buildMultiPoint((MultiPoint) g)));
-        } else if (g instanceof LinearRing || g instanceof LineString) {
-            geom.setGeometryContent(factory.createLineString(buildLineString((LineString) g)));
+            org.geoserver.mapml.xml.MultiPoint multiPoint = buildMultiPoint((MultiPoint) g);
+            if (styleCLass != null) {
+                multiPoint.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createMultiPoint(multiPoint));
+        } else if (g instanceof LineString) {
+            org.geoserver.mapml.xml.LineString lineString = buildLineString((LineString) g);
+            if (styleCLass != null) {
+                lineString.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createLineString(lineString));
         } else if (g instanceof MultiLineString) {
-            geom.setGeometryContent(
-                    factory.createMultiLineString(buildMultiLineString((MultiLineString) g)));
+            org.geoserver.mapml.xml.MultiLineString multiLineString =
+                    buildMultiLineString((MultiLineString) g);
+            if (styleCLass != null) {
+                multiLineString.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createMultiLineString(multiLineString));
         } else if (g instanceof Polygon) {
-            geom.setGeometryContent(factory.createPolygon(buildPolygon((Polygon) g)));
+            org.geoserver.mapml.xml.Polygon polygon = buildPolygon((Polygon) g);
+            if (styleCLass != null) {
+                polygon.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createPolygon(polygon));
         } else if (g instanceof MultiPolygon) {
-            geom.setGeometryContent(
-                    factory.createMultiPolygon(buildMultiPolygon((MultiPolygon) g)));
+            org.geoserver.mapml.xml.MultiPolygon multiPolygon = buildMultiPolygon((MultiPolygon) g);
+            if (styleCLass != null) {
+                multiPolygon.setStyle(styleCLass);
+            }
+            geom.setGeometryContent(factory.createMultiPolygon(multiPolygon));
         } else if (g instanceof GeometryCollection) {
             geom.setGeometryContent(
                     factory.createGeometryCollection(

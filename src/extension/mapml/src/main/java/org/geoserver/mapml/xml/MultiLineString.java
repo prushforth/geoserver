@@ -13,7 +13,9 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -43,6 +45,10 @@ public class MultiLineString {
             namespace = "http://www.w3.org/1999/xhtml")
     protected List<JAXBElement<List<String>>> twoOrMoreCoordinatePairs;
 
+    @XmlAttribute(name = "class")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String style;
+
     /**
      * Gets the value of the twoOrMoreCoordinatePairs property.
      *
@@ -66,5 +72,23 @@ public class MultiLineString {
             twoOrMoreCoordinatePairs = new ArrayList<>();
         }
         return this.twoOrMoreCoordinatePairs;
+    }
+
+    /**
+     * Gets the value of the style property.
+     *
+     * @return the style class
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the value of the style property.
+     *
+     * @param styleCLass the style class
+     */
+    public void setStyle(String styleCLass) {
+        this.style = styleCLass;
     }
 }

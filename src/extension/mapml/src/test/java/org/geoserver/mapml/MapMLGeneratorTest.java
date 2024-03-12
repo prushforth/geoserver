@@ -45,7 +45,7 @@ public class MapMLGeneratorTest extends GeoServerTestSupport {
                 new org.locationtech.jts.geom.MultiPoint(points, jtsf);
         JAXBElement<org.geoserver.mapml.xml.MultiPoint> mp = null;
         try {
-            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint);
+            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint, null);
 
             mp = (JAXBElement<org.geoserver.mapml.xml.MultiPoint>) g.getGeometryContent();
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class MapMLGeneratorTest extends GeoServerTestSupport {
                 new org.locationtech.jts.geom.MultiPoint(points, jtsf);
         JAXBElement<org.geoserver.mapml.xml.MultiPoint> mp = null;
         try {
-            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint);
+            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint, null);
 
             mp = (JAXBElement<org.geoserver.mapml.xml.MultiPoint>) g.getGeometryContent();
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class MapMLGeneratorTest extends GeoServerTestSupport {
                 new org.locationtech.jts.geom.MultiPoint(points, jtsf);
         JAXBElement<org.geoserver.mapml.xml.MultiPoint> mp = null;
         try {
-            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint);
+            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint, null);
 
             mp = (JAXBElement<org.geoserver.mapml.xml.MultiPoint>) g.getGeometryContent();
         } catch (Exception e) {
@@ -159,7 +159,7 @@ public class MapMLGeneratorTest extends GeoServerTestSupport {
                 new org.locationtech.jts.geom.MultiPoint(points, jtsf);
         JAXBElement<org.geoserver.mapml.xml.MultiPoint> mp = null;
         try {
-            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint);
+            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint, null);
 
             mp = (JAXBElement<org.geoserver.mapml.xml.MultiPoint>) g.getGeometryContent();
         } catch (Exception e) {
@@ -184,7 +184,7 @@ public class MapMLGeneratorTest extends GeoServerTestSupport {
         jtsMultiPoint = new org.locationtech.jts.geom.MultiPoint(points, jtsf);
         mp = null;
         try {
-            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint);
+            GeometryContent g = featureBuilder.buildGeometry(jtsMultiPoint, null);
 
             mp = (JAXBElement<org.geoserver.mapml.xml.MultiPoint>) g.getGeometryContent();
         } catch (Exception e) {

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -41,6 +43,10 @@ public class MultiPolygon {
     @XmlElement(name = "map-polygon", required = true, namespace = "http://www.w3.org/1999/xhtml")
     protected List<Polygon> polygon;
 
+    @XmlAttribute(name = "class")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String style;
+
     /**
      * Gets the value of the polygon property.
      *
@@ -63,5 +69,23 @@ public class MultiPolygon {
             polygon = new ArrayList<>();
         }
         return this.polygon;
+    }
+
+    /**
+     * Gets the value of the style property.
+     *
+     * @return the style class
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the value of the style property.
+     *
+     * @param styleCLass the style class
+     */
+    public void setStyle(String styleCLass) {
+        this.style = styleCLass;
     }
 }

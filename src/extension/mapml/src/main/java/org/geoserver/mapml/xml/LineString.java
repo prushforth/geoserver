@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlList;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -44,6 +46,10 @@ public class LineString {
             namespace = "http://www.w3.org/1999/xhtml")
     protected List<String> coordinates;
 
+    @XmlAttribute(name = "class")
+    @XmlSchemaType(name = "anySimpleType")
+    protected String style;
+
     /**
      * Gets the value of the coordinates property.
      *
@@ -66,5 +72,23 @@ public class LineString {
             coordinates = new ArrayList<>();
         }
         return this.coordinates;
+    }
+
+    /**
+     * Gets the style class
+     *
+     * @return the style class
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the style class
+     *
+     * @param styleCLass
+     */
+    public void setStyle(String styleCLass) {
+        this.style = styleCLass;
     }
 }
