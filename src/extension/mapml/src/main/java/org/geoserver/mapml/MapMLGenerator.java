@@ -114,6 +114,10 @@ public class MapMLGenerator {
         } else {
             geometryContent =
                     convertGeometryToSymbolizerType(g, mapMLStyle, mapMLStyle.getCSSClassName());
+            f.setClazz(
+                    !f.getClazz().isEmpty()
+                            ? f.getClazz() + " " + mapMLStyle.getCSSClassName()
+                            : mapMLStyle.getCSSClassName());
         }
         // can't convert geometry to type expected by symbolizer
         if (geometryContent.isEmpty()) {
