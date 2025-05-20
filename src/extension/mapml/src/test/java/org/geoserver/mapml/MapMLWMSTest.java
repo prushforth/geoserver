@@ -31,7 +31,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1640,7 +1639,7 @@ public class MapMLWMSTest extends MapMLTestSupport {
         assertEquals("https://opensource.org/license/apache-2-0", licenseLink.getHref());
     }
 
-     @Test
+    @Test
     public void testTransparentParameterInLinks() throws Exception {
         HashMap<String, String> params = new HashMap<>();
         params.put("version", "1.3.0");
@@ -1668,18 +1667,13 @@ public class MapMLWMSTest extends MapMLTestSupport {
         assertXpathEvaluatesTo("1", "count(//html:map-link[@rel='image'][@tref])", doc);
         URL url = new URL(xpath.evaluate("//html:map-link[@rel='image']/@tref", doc));
         HashMap<String, String> vars = parseQuery(url);
-        assertEquals("The TRANSPARENT parameter should default to true", "true", vars.get("transparent"
-    ));
+        assertEquals("The TRANSPARENT parameter should default to true", "true", vars.get("transparent"));
 
         // Test with explicit transparency set to false
         params.put("transparent", "false");
 
-        MockRequestResponse requestResponseFalse = getMockRequestResponse(
-                MockData.ROAD_SEGMENTS.getLocalPart(),
-                params,
-                null,
-                null,
-                null);
+        MockRequestResponse requestResponseFalse =
+                getMockRequestResponse(MockData.ROAD_SEGMENTS.getLocalPart(), params, null, null, null);
 
         org.w3c.dom.Document docFalse = dom(
                 new ByteArrayInputStream(
@@ -1692,7 +1686,7 @@ public class MapMLWMSTest extends MapMLTestSupport {
         assertEquals("The TRANSPARENT parameter should be passed as false", "false", varsFalse.get("transparent"));
 
         // Test transparency in rel=tile links
-        params.put("format_options", MapMLConstants.MAPML_USE_TILES_REP+":"+"true");
+        params.put("format_options", MapMLConstants.MAPML_USE_TILES_REP + ":" + "true");
         MockRequestResponse tileResponse = getMockRequestResponse(
                 MockData.ROAD_SEGMENTS.getPrefix() + ":" + MockData.ROAD_SEGMENTS.getLocalPart(),
                 params,
@@ -1708,14 +1702,15 @@ public class MapMLWMSTest extends MapMLTestSupport {
         assertXpathEvaluatesTo("1", "count(//html:map-link[@rel='tile'][@tref])", tileDoc);
         URL tileUrl = new URL(xpath.evaluate("//html:map-link[@rel='tile']/@tref", tileDoc));
         HashMap<String, String> tileVars = parseQuery(tileUrl);
-        
+
         // Verify this is a WMS tile-shaped request, not a WMTS GetTile request
         assertEquals("Should be a WMS request", "GetMap", tileVars.get("request"));
-        assertEquals("The TRANSPARENT parameter should be passed to WMS tile links", "false", tileVars.get("transparent"));
-        
+        assertEquals(
+                "The TRANSPARENT parameter should be passed to WMS tile links", "false", tileVars.get("transparent"));
+
         // Test transparency in rel=tile links
         params.put("transparent", "true");
-        params.put("format_options", MapMLConstants.MAPML_USE_TILES_REP+":"+"true");
+        params.put("format_options", MapMLConstants.MAPML_USE_TILES_REP + ":" + "true");
         // Test with explicit transparency set to false for tiles
         MockRequestResponse tileResponseFalse = getMockRequestResponse(
                 MockData.ROAD_SEGMENTS.getPrefix() + ":" + MockData.ROAD_SEGMENTS.getLocalPart(),
@@ -1723,21 +1718,23 @@ public class MapMLWMSTest extends MapMLTestSupport {
                 null,
                 null,
                 null);
-                
-                
+
         org.w3c.dom.Document tileDocFalse = dom(
                 new ByteArrayInputStream(
                         tileResponseFalse.response.getContentAsString().getBytes()),
                 true);
-                
+
         assertXpathEvaluatesTo("1", "count(//html:map-link[@rel='tile'][@tref])", tileDocFalse);
         URL tileUrlTrue = new URL(xpath.evaluate("//html:map-link[@rel='tile']/@tref", tileDocFalse));
         HashMap<String, String> tileVarsTrue = parseQuery(tileUrlTrue);
-        
+
         // Verify it's still a WMS tile-shaped request
         assertEquals("Should be a WMS request", "GetMap", tileVarsTrue.get("request"));
-        assertEquals("The TRANSPARENT parameter should be passed as true to WMS tile links", "true", tileVarsTrue.get("transparent"));
-        
+        assertEquals(
+                "The TRANSPARENT parameter should be passed as true to WMS tile links",
+                "true",
+                tileVarsTrue.get("transparent"));
+
         // TO Do:
         // test MapMLConstants.MAPML_MULTILAYER_AS_MULTIEXTENT+":"+"true", make sure that each extent in a multi-layer
         // request gets the correct TRANSPARENT value
@@ -1747,7 +1744,7 @@ public class MapMLWMSTest extends MapMLTestSupport {
         // the mapmlfeatures:true format_options value to get a leaf node from
         // a raster layer.
     }
-    
+
     private void testAlternateBounds(List<Link> alternateLinks, ProjType projType, Envelope bounds, double tolerance) {
         Link osmLink = alternateLinks.stream()
                 .filter(l -> l.getProjection().equalsIgnoreCase(projType.value()))
